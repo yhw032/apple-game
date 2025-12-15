@@ -31,6 +31,7 @@ const startScreenOverlayEl = document.getElementById('startScreenOverlay');
 const startBtnEl = document.getElementById('startBtn');
 const bgmAudioEl = document.getElementById('bgmAudio');
 const bgmToggleBtnEl = document.getElementById('bgmToggleBtn');
+const volumeSliderEl = document.getElementById('volumeSlider');
 
 
 // Initialize game
@@ -309,4 +310,10 @@ bgmToggleBtnEl.addEventListener('click', () => {
     bgmAudioEl.pause();
     bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
   }
+});
+
+// Volume Control
+bgmAudioEl.volume = volumeSliderEl.value / 100;
+volumeSliderEl.addEventListener('input', (e) => {
+  bgmAudioEl.volume = e.target.value / 100;
 });

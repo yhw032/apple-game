@@ -67,6 +67,59 @@ body {
     gap: 15px;
 }
 
+.volume-control {
+    display: flex;
+    align-items: center;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 6px;
+    background: rgba(103, 126, 234, 0.2);
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.volume-slider:hover {
+    background: rgba(103, 126, 234, 0.3);
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(103, 126, 234, 0.4);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(103, 126, 234, 0.6);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(103, 126, 234, 0.4);
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(103, 126, 234, 0.6);
+}
+
 .bgm-toggle-btn {
     background: rgba(103, 126, 234, 0.2);
     border: none;
