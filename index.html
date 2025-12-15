@@ -13,12 +13,31 @@
 </head>
 
 <body>
+  <!-- BGM Audio Element -->
+  <audio id="bgmAudio" loop>
+    <source src="public/audio/Cooking-Banana.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Start Screen Overlay -->
+  <div class="start-screen-overlay active" id="startScreenOverlay">
+    <div class="start-screen-content">
+      <h1>🍎 Apple Sum Game</h1>
+      <p class="start-description">Drag to select apples that sum to 10!</p>
+      <button class="start-btn" id="startBtn">Start Game</button>
+    </div>
+  </div>
+
   <div class="game-container">
     <div class="header">
       <h1>🍎 Apple Sum Game</h1>
-      <div class="score-display">
-        <div class="score-label">Score</div>
-        <div class="score-value" id="score">0</div>
+      <div class="header-controls">
+        <button class="bgm-toggle-btn" id="bgmToggleBtn" title="Toggle BGM">
+          <span class="bgm-icon"><img src="public/image/music-on.svg" alt=""></span>
+        </button>
+        <div class="score-display">
+          <div class="score-label">Score</div>
+          <div class="score-value" id="score">0</div>
+        </div>
       </div>
     </div>
 
@@ -79,6 +98,14 @@
             <span class="combo-freq">★</span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="license-info">
+        <div class="license-title">🎵 BGM License</div>
+        <div class="license-text">Ichinose Sound - Cooking Banana <a href="https://www.youtube.com/@IchinoseSound"
+            target="_blank">Ichinose Sound Youtube</a></div>
       </div>
     </div>
   </div>

@@ -27,6 +27,10 @@ const finalScoreEl = document.getElementById('finalScore');
 const restartBtnEl = document.getElementById('restartBtn');
 const selectionSumEl = document.getElementById('selectionSum');
 const selectionSumWrapperEl = document.getElementById('selectionSumWrapper');
+const startScreenOverlayEl = document.getElementById('startScreenOverlay');
+const startBtnEl = document.getElementById('startBtn');
+const bgmAudioEl = document.getElementById('bgmAudio');
+const bgmToggleBtnEl = document.getElementById('bgmToggleBtn');
 
 
 // Initialize game
@@ -281,10 +285,28 @@ function endGame() {
   gameOverOverlayEl.classList.add('active');
 }
 
+// Start game
+startBtnEl.addEventListener('click', () => {
+  startScreenOverlayEl.classList.remove('active');
+  initGame();
+  // Play BGM
+  bgmAudioEl.play().catch(err => {
+    console.log('BGM autoplay prevented:', err);
+  });
+});
+
 // Restart game
 restartBtnEl.addEventListener('click', () => {
   initGame();
 });
 
-// Start game on load
-initGame();
+// BGM Toggle
+bgmToggleBtnEl.addEventListener('click', () => {
+  if (bgmAudioEl.paused) {
+    bgmAudioEl.play();
+    bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
+  } else {
+    bgmAudioEl.pause();
+    bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
+  }
+});
