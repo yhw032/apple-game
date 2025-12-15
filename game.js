@@ -32,6 +32,7 @@ const startBtnEl = document.getElementById('startBtn');
 const bgmAudioEl = document.getElementById('bgmAudio');
 const bgmToggleBtnEl = document.getElementById('bgmToggleBtn');
 const volumeSliderEl = document.getElementById('volumeSlider');
+const uiAudioEl = document.getElementById('uiAudio');
 
 
 // Initialize game
@@ -219,6 +220,12 @@ function checkSelection() {
 // Remove selected apples and update game state
 function removeSelectedApples() {
   inputLocked = true;
+
+  // Play UI sound effect
+  uiAudioEl.currentTime = 0; // Reset to start for rapid successive plays
+  uiAudioEl.play().catch(err => {
+    console.log('UI sound play prevented:', err);
+  });
 
   const applesCount = selectedApples.length;
   score += applesCount;
