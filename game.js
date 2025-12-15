@@ -15,6 +15,7 @@ let isSelecting = false;
 let selectionStart = { x: 0, y: 0 };
 let selectionEnd = { x: 0, y: 0 };
 let selectedApples = [];
+let cachedApplePositions = [];
 
 // DOM elements
 const gameBoardEl = document.getElementById('gameBoard');
@@ -101,6 +102,20 @@ gameBoardEl.addEventListener('mousedown', (e) => {
   selectionBoxEl.style.height = '0px';
   selectionBoxEl.classList.add('active');
   selectionBoxEl.classList.remove('valid', 'invalid');
+
+  const apples = gameBoardEl.querySelectorAll('.apple:not(.removing)');
+  const boardRect = gameBoardEl.getBoundingClientRect();
+
+  cachedApplePositions = Array.from(apples).map(apple => {
+    const rect = apple.getBoundingClientRect();
+    return {
+      element: apple,
+      left: rect.left - boardRect.left,
+      top: rect.top - boardRect.top,
+      right: rect.right - boardRect.left,
+      bottom: rect.bottom - boardRect.top
+    };
+  });
 });
 
 gameBoardEl.addEventListener('mousemove', (e) => {
@@ -172,26 +187,15 @@ function checkSelection() {
     .forEach(apple => apple.classList.remove('highlighted'));
 
   selectedApples = [];
-  const apples = gameBoardEl.querySelectorAll('.apple:not(.removing)');
 
-  apples.forEach(apple => {
-    const rect = apple.getBoundingClientRect();
-    const boardRect = gameBoardEl.getBoundingClientRect();
-
-    const appleRect = {
-      left: rect.left - boardRect.left,
-      top: rect.top - boardRect.top,
-      right: rect.right - boardRect.left,
-      bottom: rect.bottom - boardRect.top
-    };
-
+  cachedApplePositions.forEach(pos => {
     // Check if apple intersects with selection
-    if (!(appleRect.right < selectionRect.left ||
-      appleRect.left > selectionRect.right ||
-      appleRect.bottom < selectionRect.top ||
-      appleRect.top > selectionRect.bottom)) {
-      selectedApples.push(apple);
-      apple.classList.add('highlighted');
+    if (!(pos.right < selectionRect.left ||
+      pos.left > selectionRect.right ||
+      pos.bottom < selectionRect.top ||
+      pos.top > selectionRect.bottom)) {
+      selectedApples.push(pos.element);
+      pos.element.classList.add('highlighted');
     }
   });
 
