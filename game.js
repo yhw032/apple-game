@@ -8,6 +8,7 @@ let score = 0;
 let timeRemaining = GAME_DURATION;
 let gameActive = false;
 let timerInterval = null;
+let inputLocked = false;
 
 // Drag selection state
 let isSelecting = false;
@@ -70,7 +71,7 @@ function createAppleElement(row, col, value) {
 
 // Mouse event handlers for drag selection
 gameBoardEl.addEventListener('mousedown', (e) => {
-  if (!gameActive) return;
+  if (!gameActive || inputLocked) return;
 
   const rect = gameBoardEl.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -151,7 +152,7 @@ function checkSelection() {
   };
 
   selectedApples = [];
-  const apples = gameBoardEl.querySelectorAll('.apple');
+  const apples = gameBoardEl.querySelectorAll('.apple:not(.removing)');
 
   apples.forEach(apple => {
     const rect = apple.getBoundingClientRect();
@@ -190,6 +191,8 @@ function checkSelection() {
 
 // Remove selected apples and update game state
 function removeSelectedApples() {
+  inputLocked = true;
+
   const applesCount = selectedApples.length;
   score += applesCount;
   updateScore();
@@ -215,6 +218,8 @@ function removeSelectedApples() {
       gameBoard[row][col] = null;
       apple.remove();
     });
+
+    inputLocked = false;
   }, 400);
 }
 
