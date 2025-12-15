@@ -306,6 +306,12 @@ startBtnEl.addEventListener('click', () => {
 // Restart game
 restartBtnEl.addEventListener('click', () => {
   initGame();
+  // Keep BGM playing if it was already playing (don't restart it)
+  if (bgmAudioEl.paused) {
+    bgmAudioEl.play().catch(err => {
+      console.log('BGM play prevented:', err);
+    });
+  }
 });
 
 // BGM Toggle
@@ -321,6 +327,7 @@ bgmToggleBtnEl.addEventListener('click', () => {
 
 // Volume Control
 bgmAudioEl.volume = volumeSliderEl.value / 100;
+uiAudioEl.volume = 0.5; // Set UI sound at 50% volume (independent from BGM)
 volumeSliderEl.addEventListener('input', (e) => {
   bgmAudioEl.volume = e.target.value / 100;
 });
