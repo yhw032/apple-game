@@ -120,8 +120,7 @@ body {
 
 
 .apple:hover {
-    border: 2px solid white;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
 }
 
 .apple[data-value="1"] {
@@ -162,6 +161,18 @@ body {
 
 .apple.removing {
     animation: pop-out 0.4s ease forwards;
+}
+
+.apple.highlighted {
+    outline: 3px solid rgba(255, 255, 255, 0.9);
+    outline-offset: -3px;
+    transform: scale(1.05);
+    z-index: 2;
+}
+
+.apple.highlighted.valid {
+    outline-color: #f5576c;
+    box-shadow: 0 0 20px rgba(245, 87, 108, 0.6);
 }
 
 @keyframes pop-out {

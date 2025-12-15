@@ -111,6 +111,9 @@ document.addEventListener('mouseup', (e) => {
 
   isSelecting = false;
 
+  gameBoardEl.querySelectorAll('.apple.highlighted')
+    .forEach(apple => apple.classList.remove('highlighted'));
+
   // Check if selection is valid and process
   const isValid = selectionBoxEl.classList.contains('valid') && selectedApples.length > 0;
 
@@ -151,6 +154,9 @@ function checkSelection() {
     bottom: Math.max(selectionStart.y, selectionEnd.y)
   };
 
+  gameBoardEl.querySelectorAll('.apple.highlighted')
+    .forEach(apple => apple.classList.remove('highlighted'));
+
   selectedApples = [];
   const apples = gameBoardEl.querySelectorAll('.apple:not(.removing)');
 
@@ -171,6 +177,7 @@ function checkSelection() {
       appleRect.bottom < selectionRect.top ||
       appleRect.top > selectionRect.bottom)) {
       selectedApples.push(apple);
+      apple.classList.add('highlighted');
     }
   });
 
@@ -183,9 +190,11 @@ function checkSelection() {
   if (sum === 10 && selectedApples.length > 0) {
     selectionBoxEl.classList.remove('invalid');
     selectionBoxEl.classList.add('valid');
+    selectedApples.forEach(apple => apple.classList.add('valid'));
   } else {
     selectionBoxEl.classList.remove('valid');
     selectionBoxEl.classList.add('invalid');
+    selectedApples.forEach(apple => apple.classList.remove('valid'));
   }
 }
 
