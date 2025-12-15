@@ -233,6 +233,51 @@ body {
     border-color: #667eea;
 }
 
+.selection-sum-wrapper {
+    position: absolute;
+    transform: translate(8px, -8px);
+    pointer-events: none;
+    z-index: 11;
+}
+
+.selection-sum {
+    min-width: calc(3ch + 12px);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 999px;
+    background: rgba(15, 14, 23, 0.9);
+    color: white;
+    display: none;
+    white-space: nowrap;
+}
+
+.selection-sum.active {
+    display: block;
+}
+
+.selection-sum.valid {
+    background: #f5576c;
+    box-shadow: 0 0 15px rgba(245, 87, 108, 0.6);
+    animation: pulse 0.2s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .sidebar {
     display: flex;
     flex-direction: column;

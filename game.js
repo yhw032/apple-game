@@ -25,6 +25,9 @@ const timerBarEl = document.getElementById('timerBar');
 const gameOverOverlayEl = document.getElementById('gameOverOverlay');
 const finalScoreEl = document.getElementById('finalScore');
 const restartBtnEl = document.getElementById('restartBtn');
+const selectionSumEl = document.getElementById('selectionSum');
+const selectionSumWrapperEl = document.getElementById('selectionSumWrapper');
+
 
 // Initialize game
 function initGame() {
@@ -111,6 +114,8 @@ document.addEventListener('mouseup', (e) => {
 
   isSelecting = false;
 
+  selectionSumEl.classList.remove('active', 'valid');
+
   gameBoardEl.querySelectorAll('.apple.highlighted')
     .forEach(apple => apple.classList.remove('highlighted'));
 
@@ -143,6 +148,9 @@ function updateSelectionBox() {
   selectionBoxEl.style.top = `${top + paddingTop}px`;
   selectionBoxEl.style.width = `${width}px`;
   selectionBoxEl.style.height = `${height}px`;
+
+  selectionSumWrapperEl.style.left = `${left + width}px`;
+  selectionSumWrapperEl.style.top = `${top}px`;
 }
 
 // Check which apples are in selection and if sum equals 10
@@ -186,15 +194,20 @@ function checkSelection() {
     return total + parseInt(apple.dataset.value);
   }, 0);
 
+  selectionSumEl.textContent = sum;
+  selectionSumEl.classList.add('active');
+
   // Update selection box appearance
   if (sum === 10 && selectedApples.length > 0) {
     selectionBoxEl.classList.remove('invalid');
     selectionBoxEl.classList.add('valid');
     selectedApples.forEach(apple => apple.classList.add('valid'));
+    selectionSumEl.classList.add('valid');
   } else {
     selectionBoxEl.classList.remove('valid');
     selectionBoxEl.classList.add('invalid');
     selectedApples.forEach(apple => apple.classList.remove('valid'));
+    selectionSumEl.classList.remove('valid');
   }
 }
 
