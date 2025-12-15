@@ -96,11 +96,11 @@ body {
 
 .game-board {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(17, 1fr);
+    grid-template-columns: repeat(17, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     gap: 6px;
     width: 100%;
-    aspect-ratio: 10 / 17;
+    aspect-ratio: 17 / 10;
     position: relative;
 }
 
@@ -118,17 +118,9 @@ body {
     position: relative;
 }
 
-.apple::before {
-    content: '🍎';
-    position: absolute;
-    font-size: 0.6em;
-    top: 4px;
-    left: 4px;
-    opacity: 0.5;
-}
 
 .apple:hover {
-    transform: translateY(-2px) scale(1.05);
+    border: 2px solid white;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 

@@ -1,6 +1,6 @@
 // Game state
-const ROWS = 17;
-const COLS = 10;
+const ROWS = 10;
+const COLS = 17;
 const GAME_DURATION = 120; // 2 minutes in seconds
 
 let gameBoard = [];
@@ -76,12 +76,17 @@ gameBoardEl.addEventListener('mousedown', (e) => {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
+
   isSelecting = true;
   selectionStart = { x, y };
   selectionEnd = { x, y };
 
-  selectionBoxEl.style.left = `${x}px`;
-  selectionBoxEl.style.top = `${y}px`;
+  const wrapperStyle = getComputedStyle(gameBoardEl.parentElement);
+  const paddingLeft = parseFloat(wrapperStyle.paddingLeft);
+  const paddingTop = parseFloat(wrapperStyle.paddingTop);
+
+  selectionBoxEl.style.left = `${x + paddingLeft}px`;
+  selectionBoxEl.style.top = `${y + paddingTop}px`;
   selectionBoxEl.style.width = '0px';
   selectionBoxEl.style.height = '0px';
   selectionBoxEl.classList.add('active');
@@ -126,8 +131,12 @@ function updateSelectionBox() {
   const width = Math.abs(selectionEnd.x - selectionStart.x);
   const height = Math.abs(selectionEnd.y - selectionStart.y);
 
-  selectionBoxEl.style.left = `${left}px`;
-  selectionBoxEl.style.top = `${top}px`;
+  const wrapperStyle = getComputedStyle(gameBoardEl.parentElement);
+  const paddingLeft = parseFloat(wrapperStyle.paddingLeft);
+  const paddingTop = parseFloat(wrapperStyle.paddingTop);
+
+  selectionBoxEl.style.left = `${left + paddingLeft}px`;
+  selectionBoxEl.style.top = `${top + paddingTop}px`;
   selectionBoxEl.style.width = `${width}px`;
   selectionBoxEl.style.height = `${height}px`;
 }
@@ -206,90 +215,7 @@ function removeSelectedApples() {
       gameBoard[row][col] = null;
       apple.remove();
     });
-
-    // Apply gravity and refill
-    applyGravity(removedPositions);
   }, 400);
-}
-
-// Apply gravity to make apples fall down
-function applyGravity(removedPositions) {
-  // Create a map to track which apples need to move
-  const applesToUpdate = new Map();
-
-  // For each column that had apples removed
-  const affectedCols = new Set();
-  removedPositions.forEach(pos => {
-    const col = parseInt(pos.split(',')[1]);
-    affectedCols.add(col);
-  });
-
-  affectedCols.forEach(col => {
-    // Collect non-null values from bottom to top
-    const columnApples = [];
-    for (let row = ROWS - 1; row >= 0; row--) {
-      if (gameBoard[row][col] !== null) {
-        columnApples.push({
-          value: gameBoard[row][col],
-          originalRow: row
-        });
-      }
-    }
-
-    // Calculate new positions
-    const newApples = [];
-    for (let row = ROWS - 1; row >= 0; row--) {
-      const index = ROWS - 1 - row;
-      if (index < columnApples.length) {
-        // Existing apple moving to new position
-        const appleData = columnApples[index];
-        gameBoard[row][col] = appleData.value;
-
-        if (appleData.originalRow !== row) {
-          // Apple needs to move
-          applesToUpdate.set(`${appleData.originalRow},${col}`, {
-            newRow: row,
-            newCol: col,
-            value: appleData.value,
-            isMoving: true
-          });
-        }
-      } else {
-        // New apple needed
-        const value = Math.floor(Math.random() * 9) + 1;
-        gameBoard[row][col] = value;
-        newApples.push({ row, col, value });
-      }
-    }
-
-    // Update DOM for existing apples that moved
-    applesToUpdate.forEach((data, key) => {
-      const [oldRow, oldCol] = key.split(',').map(Number);
-      const apple = gameBoardEl.querySelector(`[data-row="${oldRow}"][data-col="${oldCol}"]`);
-      if (apple && data.isMoving) {
-        apple.dataset.row = data.newRow;
-        apple.dataset.col = data.newCol;
-        apple.style.gridRow = data.newRow + 1;
-        apple.style.gridColumn = data.newCol + 1;
-        apple.classList.add('falling');
-        setTimeout(() => {
-          apple.classList.remove('falling');
-        }, 300);
-      }
-    });
-
-    // Add new apples
-    newApples.forEach(({ row, col, value }) => {
-      createAppleElement(row, col, value);
-      const apple = gameBoardEl.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-      if (apple) {
-        apple.classList.add('falling');
-        setTimeout(() => {
-          apple.classList.remove('falling');
-        }, 300);
-      }
-    });
-  });
 }
 
 // Update score display
