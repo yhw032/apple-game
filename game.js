@@ -1,7 +1,27 @@
 // Game state
-const ROWS = 10;
-const COLS = 17;
 const GAME_DURATION = 120; // 2 minutes in seconds
+
+// Responsive grid configuration
+let ROWS = 10;
+let COLS = 17;
+
+function isMobile() {
+  return window.innerWidth <= 768;
+}
+
+function updateGridSize() {
+  if (isMobile()) {
+    ROWS = 17;
+    COLS = 10;
+  } else {
+    ROWS = 10;
+    COLS = 17;
+  }
+
+  // Update CSS grid template
+  gameBoardEl.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
+  gameBoardEl.style.gridTemplateRows = `repeat(${ROWS}, 1fr)`;
+}
 
 let gameBoard = [];
 let score = 0;
@@ -77,6 +97,9 @@ function initGame() {
   tickingAudioEl.currentTime = 0;
   countAudioEl.pause();
   countAudioEl.currentTime = 0;
+
+  // Update grid size for responsive layout
+  updateGridSize();
 
   // Clear and regenerate board
   gameBoardEl.innerHTML = '';
@@ -416,4 +439,21 @@ volumeSliderEl.addEventListener('input', (e) => {
   const volume = e.target.value;
   bgmAudioEl.volume = volume / 100;
   saveVolume(volume);
+});
+
+// Handle window resize for responsive layout
+let previousIsMobile = isMobile();
+window.addEventListener('resize', () => {
+  const currentIsMobile = isMobile();
+  // Only reinitialize if mobile state changed
+  if (previousIsMobile !== currentIsMobile) {
+    previousIsMobile = currentIsMobile;
+    if (gameActive) {
+      // Restart the game with new layout
+      initGame();
+    } else {
+      // Just update the grid if game is not active
+      updateGridSize();
+    }
+  }
 });
