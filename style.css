@@ -698,6 +698,54 @@ body {
     .apple {
         font-size: 1rem;
     }
+
+    /* Responsive header for mobile */
+    .header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .header-controls {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .volume-control {
+        order: 3;
+        width: 100%;
+    }
+
+    .volume-slider {
+        width: 100%;
+    }
+
+    .bgm-toggle-btn {
+        padding: 12px;
+        order: 2;
+    }
+
+    .score-display {
+        order: 1;
+    }
+
+    .score-label {
+        font-size: 0.7rem;
+    }
+
+    .score-value {
+        font-size: 1.5rem !important;
+    }
+
+    .high-score-display .score-value {
+        font-size: 1.5rem !important;
+    }
 }
 
 /* High Score Styles */
