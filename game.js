@@ -34,6 +34,7 @@ const bgmAudioEl = document.getElementById('bgmAudio');
 const bgmToggleBtnEl = document.getElementById('bgmToggleBtn');
 const volumeSliderEl = document.getElementById('volumeSlider');
 const uiAudioEl = document.getElementById('uiAudio');
+const tickingAudioEl = document.getElementById('tickingAudio');
 
 
 // Initialize game
@@ -42,6 +43,10 @@ function initGame() {
   score = 0;
   timeRemaining = GAME_DURATION;
   gameActive = true;
+
+  // Stop ticking sound if playing
+  tickingAudioEl.pause();
+  tickingAudioEl.currentTime = 0;
 
   // Clear and regenerate board
   gameBoardEl.innerHTML = '';
@@ -283,6 +288,13 @@ function updateGameTimer() {
   timeRemaining--;
   updateTimer();
 
+  // Play ticking sound when 30 seconds remain
+  if (timeRemaining === 30) {
+    tickingAudioEl.play().catch(err => {
+      console.log('Ticking sound play prevented:', err);
+    });
+  }
+
   if (timeRemaining <= 0) {
     endGame();
   }
@@ -292,6 +304,10 @@ function updateGameTimer() {
 function endGame() {
   gameActive = false;
   clearInterval(timerInterval);
+
+  // Stop ticking sound if playing
+  tickingAudioEl.pause();
+  tickingAudioEl.currentTime = 0;
 
   finalScoreEl.textContent = score;
   gameOverOverlayEl.classList.add('active');
@@ -332,6 +348,7 @@ bgmToggleBtnEl.addEventListener('click', () => {
 // Volume Control
 bgmAudioEl.volume = volumeSliderEl.value / 100;
 uiAudioEl.volume = 0.5; // Set UI sound at 50% volume (independent from BGM)
+tickingAudioEl.volume = 0.5; // Set ticking sound at 50% volume (independent from BGM)
 volumeSliderEl.addEventListener('input', (e) => {
   bgmAudioEl.volume = e.target.value / 100;
 });

@@ -94,7 +94,8 @@ This game is available for personal use.
 
 - **Game Design & Development**: YHW032
 - **Background Music**: Ichinose Sound - Cooking Banana
-- **Sound Effect**: [FoxBoyTails](https://pixabay.com/ko/users/foxboytails-49447089/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=317318) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=317318)
+- **UI Sound Effect**: [FoxBoyTails](https://pixabay.com/ko/users/foxboytails-49447089/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=317318) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=317318)
+- **Ticking Sound Effect**: [kave msri](https://pixabay.com/ko/users/kakaist-48093450/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=313948) from [Pixabay](https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=313948)
 - **Font**: Outfit by Google Fonts
 
 ---
