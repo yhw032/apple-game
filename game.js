@@ -5,6 +5,7 @@ const GAME_DURATION = 120; // 2 minutes in seconds
 
 let gameBoard = [];
 let score = 0;
+let highScore = 0;
 let timeRemaining = GAME_DURATION;
 let gameActive = false;
 let timerInterval = null;
@@ -36,7 +37,33 @@ const volumeSliderEl = document.getElementById('volumeSlider');
 const uiAudioEl = document.getElementById('uiAudio');
 const tickingAudioEl = document.getElementById('tickingAudio');
 const countAudioEl = document.getElementById('countAudio');
+const highScoreEl = document.getElementById('highScore');
+const finalHighScoreEl = document.getElementById('finalHighScore');
+const highScoreLabelEl = document.getElementById('highScoreLabel');
 
+// LocalStorage functions
+function loadHighScore() {
+  const saved = localStorage.getItem('appleGameHighScore');
+  return saved ? parseInt(saved) : 0;
+}
+
+function saveHighScore(score) {
+  localStorage.setItem('appleGameHighScore', score.toString());
+}
+
+function loadVolume() {
+  const saved = localStorage.getItem('appleGameVolume');
+  return saved ? parseInt(saved) : 50;
+}
+
+function saveVolume(volume) {
+  localStorage.setItem('appleGameVolume', volume.toString());
+}
+
+// Initialize saved data
+highScore = loadHighScore();
+const savedVolume = loadVolume();
+volumeSliderEl.value = savedVolume;
 
 // Initialize game
 function initGame() {
@@ -66,6 +93,7 @@ function initGame() {
 
   // Update UI
   updateScore();
+  updateHighScore();
   updateTimer();
   gameOverOverlayEl.classList.remove('active');
 
@@ -272,6 +300,19 @@ function removeSelectedApples() {
 // Update score display
 function updateScore() {
   scoreEl.textContent = score;
+
+  // Check and update high score
+  if (score > highScore) {
+    highScore = score;
+    saveHighScore(highScore);
+    updateHighScore();
+  }
+}
+
+// Update high score display
+function updateHighScore() {
+  highScoreEl.textContent = highScore;
+  finalHighScoreEl.textContent = highScore;
 }
 
 // Update timer display
@@ -322,6 +363,13 @@ function endGame() {
   countAudioEl.pause();
   countAudioEl.currentTime = 0;
 
+  // Check if new high score
+  if (score >= highScore) {
+    highScoreLabelEl.style.display = 'block';
+  } else {
+    highScoreLabelEl.style.display = 'none';
+  }
+
   finalScoreEl.textContent = score;
   gameOverOverlayEl.classList.add('active');
 }
@@ -359,10 +407,13 @@ bgmToggleBtnEl.addEventListener('click', () => {
 });
 
 // Volume Control
-bgmAudioEl.volume = volumeSliderEl.value / 100;
+bgmAudioEl.volume = savedVolume / 100;
 uiAudioEl.volume = 0.5; // Set UI sound at 50% volume (independent from BGM)
 tickingAudioEl.volume = 0.5; // Set ticking sound at 50% volume (independent from BGM)
-countAudioEl.volume = 0.2; // Set countdown sound at 60% volume (independent from BGM)
+countAudioEl.volume = 0.2; // Set countdown sound at 20% volume (independent from BGM)
+updateHighScore(); // Initialize high score display
 volumeSliderEl.addEventListener('input', (e) => {
-  bgmAudioEl.volume = e.target.value / 100;
+  const volume = e.target.value;
+  bgmAudioEl.volume = volume / 100;
+  saveVolume(volume);
 });
