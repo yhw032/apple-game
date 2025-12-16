@@ -139,13 +139,12 @@ function createAppleElement(row, col, value) {
 }
 
 // Mouse event handlers for drag selection
-gameBoardEl.addEventListener('mousedown', (e) => {
-  if (!gameActive || inputLocked) return;
+function handleSelectionStart(clientX, clientY) {
+  if (!gameActive || inputLocked) return false;
 
   const rect = gameBoardEl.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
 
   isSelecting = true;
   selectionStart = { x, y };
@@ -175,22 +174,26 @@ gameBoardEl.addEventListener('mousedown', (e) => {
       bottom: rect.bottom - boardRect.top
     };
   });
-});
 
-gameBoardEl.addEventListener('mousemove', (e) => {
-  if (!isSelecting || !gameActive) return;
+  return true;
+}
+
+function handleSelectionMove(clientX, clientY) {
+  if (!isSelecting || !gameActive) return false;
 
   const rect = gameBoardEl.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
 
   selectionEnd = { x, y };
   updateSelectionBox();
   checkSelection();
-});
 
-document.addEventListener('mouseup', (e) => {
-  if (!isSelecting || !gameActive) return;
+  return true;
+}
+
+function handleSelectionEnd() {
+  if (!isSelecting || !gameActive) return false;
 
   isSelecting = false;
 
@@ -211,7 +214,41 @@ document.addEventListener('mouseup', (e) => {
   }
 
   selectedApples = [];
+
+  return true;
+}
+
+// Mouse events
+gameBoardEl.addEventListener('mousedown', (e) => {
+  handleSelectionStart(e.clientX, e.clientY);
 });
+
+gameBoardEl.addEventListener('mousemove', (e) => {
+  handleSelectionMove(e.clientX, e.clientY);
+});
+
+document.addEventListener('mouseup', (e) => {
+  handleSelectionEnd();
+});
+
+// Touch events for mobile
+gameBoardEl.addEventListener('touchstart', (e) => {
+  const touch = e.touches[0];
+  if (handleSelectionStart(touch.clientX, touch.clientY)) {
+    e.preventDefault(); // Prevent scrolling
+  }
+}, { passive: false });
+
+gameBoardEl.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  if (handleSelectionMove(touch.clientX, touch.clientY)) {
+    e.preventDefault(); // Prevent scrolling
+  }
+}, { passive: false });
+
+document.addEventListener('touchend', (e) => {
+  handleSelectionEnd();
+}, { passive: false });
 
 // Update selection box position and size
 function updateSelectionBox() {
