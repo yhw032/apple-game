@@ -61,6 +61,16 @@ const highScoreEl = document.getElementById('highScore');
 const finalHighScoreEl = document.getElementById('finalHighScore');
 const highScoreLabelEl = document.getElementById('highScoreLabel');
 
+// Mobile UI elements
+const mobileTopBarEl = document.getElementById('mobileTopBar');
+const mobileTimerEl = document.getElementById('mobileTimer');
+const mobileScoreEl = document.getElementById('mobileScore');
+const mobileSettingsBtnEl = document.getElementById('mobileSettingsBtn');
+const settingsPopupOverlayEl = document.getElementById('settingsPopupOverlay');
+const settingsCloseBtnEl = document.getElementById('settingsCloseBtn');
+const settingsVolumeSliderEl = document.getElementById('settingsVolumeSlider');
+const settingsBgmToggleBtnEl = document.getElementById('settingsBgmToggleBtn');
+
 // LocalStorage functions
 function loadHighScore() {
   const saved = localStorage.getItem('appleGameHighScore');
@@ -360,6 +370,7 @@ function removeSelectedApples() {
 // Update score display
 function updateScore() {
   scoreEl.textContent = score;
+  if (mobileScoreEl) mobileScoreEl.textContent = score;
 
   // Check and update high score
   if (score > highScore) {
@@ -379,7 +390,9 @@ function updateHighScore() {
 function updateTimer() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
-  timerDisplayEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  timerDisplayEl.textContent = timeString;
+  if (mobileTimerEl) mobileTimerEl.textContent = timeString;
 
   const percentage = (timeRemaining / GAME_DURATION) * 100;
   timerBarEl.style.width = `${percentage}%`;
@@ -472,11 +485,60 @@ uiAudioEl.volume = 0.5; // Set UI sound at 50% volume (independent from BGM)
 tickingAudioEl.volume = 0.5; // Set ticking sound at 50% volume (independent from BGM)
 countAudioEl.volume = 0.2; // Set countdown sound at 20% volume (independent from BGM)
 updateHighScore(); // Initialize high score display
+
+// Sync volume sliders
 volumeSliderEl.addEventListener('input', (e) => {
   const volume = e.target.value;
   bgmAudioEl.volume = volume / 100;
   saveVolume(volume);
+  if (settingsVolumeSliderEl) settingsVolumeSliderEl.value = volume;
 });
+
+if (settingsVolumeSliderEl) {
+  settingsVolumeSliderEl.value = savedVolume;
+  settingsVolumeSliderEl.addEventListener('input', (e) => {
+    const volume = e.target.value;
+    bgmAudioEl.volume = volume / 100;
+    saveVolume(volume);
+    volumeSliderEl.value = volume;
+  });
+}
+
+// Settings popup controls
+if (mobileSettingsBtnEl) {
+  mobileSettingsBtnEl.addEventListener('click', () => {
+    settingsPopupOverlayEl.classList.add('active');
+  });
+}
+
+if (settingsCloseBtnEl) {
+  settingsCloseBtnEl.addEventListener('click', () => {
+    settingsPopupOverlayEl.classList.remove('active');
+  });
+}
+
+if (settingsPopupOverlayEl) {
+  settingsPopupOverlayEl.addEventListener('click', (e) => {
+    if (e.target === settingsPopupOverlayEl) {
+      settingsPopupOverlayEl.classList.remove('active');
+    }
+  });
+}
+
+// Settings BGM toggle (sync with main toggle)
+if (settingsBgmToggleBtnEl) {
+  settingsBgmToggleBtnEl.addEventListener('click', () => {
+    if (bgmAudioEl.paused) {
+      bgmAudioEl.play();
+      bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
+      settingsBgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
+    } else {
+      bgmAudioEl.pause();
+      bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
+      settingsBgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
+    }
+  });
+}
 
 // Handle window resize for responsive layout
 let previousIsMobile = isMobile();

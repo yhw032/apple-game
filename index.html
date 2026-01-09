@@ -33,6 +33,48 @@
     <source src="public/audio/count.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Mobile Top Bar -->
+  <div class="mobile-top-bar" id="mobileTopBar">
+    <div class="mobile-logo">🍎</div>
+    <div class="mobile-timer" id="mobileTimer">2:00</div>
+    <div class="mobile-score">
+      <span class="mobile-score-value" id="mobileScore">0</span>
+    </div>
+    <button class="mobile-settings-btn" id="mobileSettingsBtn" title="Settings">⚙️</button>
+  </div>
+
+  <!-- Settings Popup Modal -->
+  <div class="settings-popup-overlay" id="settingsPopupOverlay">
+    <div class="settings-popup">
+      <div class="settings-header">
+        <h2>⚙️ Settings</h2>
+        <button class="settings-close-btn" id="settingsCloseBtn">✕</button>
+      </div>
+      <div class="settings-content">
+        <div class="settings-section">
+          <h3>🎵 Music Controls</h3>
+          <div class="settings-item">
+            <label for="settingsVolumeSlider">Volume</label>
+            <input type="range" id="settingsVolumeSlider" class="volume-slider" min="0" max="100" value="50">
+          </div>
+          <div class="settings-item">
+            <label>BGM Toggle</label>
+            <button class="bgm-toggle-btn" id="settingsBgmToggleBtn" title="Toggle BGM">
+              <span class="bgm-icon"><img src="public/image/music-on.svg" alt=""></span>
+            </button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>ℹ️ License Info</h3>
+          <div class="settings-license">
+            <p><strong>BGM:</strong> Ichinose Sound - Cooking Banana</p>
+            <p><a href="https://www.youtube.com/@IchinoseSound" target="_blank">Ichinose Sound Youtube</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Start Screen Overlay -->
   <div class="start-screen-overlay active" id="startScreenOverlay">
     <div class="start-screen-content">
