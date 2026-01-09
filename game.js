@@ -472,12 +472,7 @@ startBtnEl.addEventListener('click', () => {
 // Restart game
 restartBtnEl.addEventListener('click', () => {
   initGame();
-  // Keep BGM playing if it was already playing (don't restart it)
-  if (bgmAudioEl.paused) {
-    bgmAudioEl.play().catch(err => {
-      console.log('BGM play prevented:', err);
-    });
-  }
+
 });
 
 // BGM Toggle
