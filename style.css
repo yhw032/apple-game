@@ -900,12 +900,14 @@ body {
         flex-direction: column;
         border-radius: 15px;
         touch-action: none;
+        overflow: hidden;
     }
 
     .game-board {
-        flex: 1;
         aspect-ratio: 10 / 17;
         max-height: calc(100vh - 65px);
+        max-width: calc(100vw - 40px);
+        width: 100%;
         touch-action: none;
     }
 
