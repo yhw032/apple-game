@@ -90,9 +90,19 @@ function saveVolume(volume) {
   localStorage.setItem('appleGameVolume', volume.toString());
 }
 
+function loadBgmEnabled() {
+  const saved = localStorage.getItem('appleGameBgmEnabled');
+  return saved !== null ? saved === 'true' : true; // Default to enabled
+}
+
+function saveBgmEnabled(enabled) {
+  localStorage.setItem('appleGameBgmEnabled', enabled.toString());
+}
+
 // Initialize saved data
 highScore = loadHighScore();
 const savedVolume = loadVolume();
+const bgmEnabled = loadBgmEnabled();
 volumeSliderEl.value = savedVolume;
 
 // Initialize game
@@ -451,10 +461,12 @@ function endGame() {
 startBtnEl.addEventListener('click', () => {
   startScreenOverlayEl.classList.remove('active');
   initGame();
-  // Play BGM
-  bgmAudioEl.play().catch(err => {
-    console.log('BGM autoplay prevented:', err);
-  });
+  // Play BGM only if it was enabled
+  if (loadBgmEnabled()) {
+    bgmAudioEl.play().catch(err => {
+      console.log('BGM autoplay prevented:', err);
+    });
+  }
 });
 
 // Restart game
@@ -473,9 +485,11 @@ bgmToggleBtnEl.addEventListener('click', () => {
   if (bgmAudioEl.paused) {
     bgmAudioEl.play();
     bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
+    saveBgmEnabled(true);
   } else {
     bgmAudioEl.pause();
     bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
+    saveBgmEnabled(false);
   }
 });
 
@@ -532,10 +546,12 @@ if (settingsBgmToggleBtnEl) {
       bgmAudioEl.play();
       bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
       settingsBgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-on.svg" alt="">';
+      saveBgmEnabled(true);
     } else {
       bgmAudioEl.pause();
       bgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
       settingsBgmToggleBtnEl.querySelector('.bgm-icon').innerHTML = '<img src="public/image/music-off.svg" alt="">';
+      saveBgmEnabled(false);
     }
   });
 }
